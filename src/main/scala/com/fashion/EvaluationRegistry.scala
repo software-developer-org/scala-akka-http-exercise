@@ -18,6 +18,12 @@ final case class Speech(speaker: String, topic: String, wordsCount: Int)
 final case class Speeches(speeches: immutable.Seq[Speech])
 
 object EvaluationRegistry {
+
+  val speaker = "Redner"
+  val topic = "Thema"
+  val date = "Datum"
+  val wordsCount = "Wörter"
+
   // actor protocol
   sealed trait Command
   final case class Evaluate(urls: Seq[String], replyTo: ActorRef[Speeches]) extends Command
@@ -35,17 +41,17 @@ object EvaluationRegistry {
     private def getData(urls: Seq[String], replyTo: ActorRef[Speeches]) {
       implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
       implicit val executionContext = system.executionContext
-      val csvFutures = urls.map(httpClientRequest)
-      val csvDataList = Future.sequence((csvFutures)).map(_.flatten);
-      csvDataList.foreach( csvData => {
+      val speechesFutures = urls.map(httpClientRequest)
+      val speeches = Future.sequence((speechesFutures)).map(_.flatten);
+      speeches.foreach( speeches => {
           println("======================================================================")
-          csvData.foreach((row) => println("<" + row.reduce((a, b) => a + "|" + b) + ">"))
+          speeches.foreach((speech) => println("<" + speech + ">"))
           println("======================================================================")
           replyTo ! Speeches(Set.empty.toSeq)
         })
     }
 
-    private def httpClientRequest(url: String): Future[Array[Array[String]]] = {
+    private def httpClientRequest(url: String): Future[Array[Speech]] = {
       // HTTP client request
       implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
       val request = HttpRequest(uri = url)
@@ -61,8 +67,9 @@ object EvaluationRegistry {
       // subscribe and handle response
       import scala.language.postfixOps
       val data = responseFuture
-        .flatMap(_.entity.toStrict(2 seconds)).map(_.data.utf8String)
+        .flatMap(_.entity.toStrict(2 minutes)).map(_.data.utf8String)
         .map(asCsvArray)
+        .map(toSpeeches)
       return data
     }
 
@@ -77,5 +84,19 @@ object EvaluationRegistry {
           // remove trailing whitespaces
           .map(column => column.trim())
         })
+    }
+
+    private def toSpeeches(csvArray: Array[Array[String]]): Array[Speech] = {
+      val header = csvArray.head
+      val speakerPos = header.indexOf(speaker)
+      val topicPos = header.indexOf((topic))
+      val datePos = header.indexOf((date))
+      val wordsCountPos = header.indexOf((wordsCount))
+
+      val data = csvArray.tail
+      return data.map(row => {
+        val speech = Speech(row(speakerPos), row(topicPos), row(wordsCountPos).toInt)
+        speech
+      })
     }
 }
