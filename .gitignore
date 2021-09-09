@@ -1,3 +1,9 @@
 *.class
 .idea
 target/
+
+.metals/
+.vscode/
+project/
+.bloop/
+sbt.json
