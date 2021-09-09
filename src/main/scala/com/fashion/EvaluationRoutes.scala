@@ -19,17 +19,17 @@ class EvaluationRoutes(evaluationRegistry: ActorRef[EvaluationRegistry.Command])
   // If ask takes more time than this to complete the request is failed
   private implicit val timeout = Timeout.create(system.settings.config.getDuration("my-app.routes.ask-timeout"))
 
-  def evaluate(): Future[Speeches] =
+  def evaluate(params: Seq[(String, String)]): Future[Speeches] = {
+    params.map((param) => println(s">>>>key: '${param._1}', val<'${param._2}'>"))
     evaluationRegistry.ask(Evaluate)
+  }
 
   val evaluationRoutes: Route =
     pathPrefix("evaluation") {
       concat(
-        pathEnd {
-          concat(
-            get {
-              complete(evaluate())
-            })
-        })
+        parameterSeq { params =>
+          complete(evaluate(params))
+        }
+      )
     }
 }

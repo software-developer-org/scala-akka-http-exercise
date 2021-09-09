@@ -30,7 +30,7 @@ class EvaluationRoutesSpec extends AnyWordSpec with Matchers with ScalaFutures w
   "EvaluationRoutes" should {
     "evaluate speeches" in {
       // note that there's no need for the host part in the uri:
-      val request = HttpRequest(uri = "/evaluation")
+      val request = HttpRequest(uri = "/evaluation?url=1&url")
 
       request ~> routes ~> check {
         status should ===(StatusCodes.OK)
