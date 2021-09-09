@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.GregorianCalendar
 import java.util.Date
+import java.util.Calendar
 
 final case class Speech(speaker: String, topic: String, date: Date, wordsCount: Int)
 final case class SpeechesEvaluation(mostSpeeches: String, mostSecurity: String, leastWordy: String)
@@ -49,12 +50,14 @@ object EvaluationRegistry {
       implicit val executionContext = system.executionContext
       val speechesFutures = urls.map(httpClientRequest)
       val speeches = Future.sequence((speechesFutures)).map(_.flatten);
-      speeches.foreach( speeches => {
-          println("======================================================================")
-          speeches.foreach((speech) => println("<" + speech + ">"))
-          println("======================================================================")
-          replyTo ! SpeechesEvaluation("", "", "")
-        })
+      speeches.foreach(speeches => {
+        val mostSpeeches = mostSpeakerForYear(speeches.toList, 2012)
+        val mostSecurity = mostSpeakerForTopic(speeches, "Innere Sicherheit")
+        val leastWordy= leastWordySpeaker(speeches)
+        val speechesEvaluation = SpeechesEvaluation(mostSecurity, mostSecurity, leastWordy);
+        println(">>>>speechesEvaluation " + speechesEvaluation)
+        replyTo ! speechesEvaluation
+      })
     }
 
     private def httpClientRequest(url: String): Future[Array[Speech]] = {
@@ -100,11 +103,70 @@ object EvaluationRegistry {
       val wordsCountPos = header.indexOf((wordsCount))
 
       val data = csvArray.tail
-      return data.map(row => {
+      val speeches = data.map(row => {
         // SimpleDateFormat is not thread safe! Hence create a new instance
         val date = new SimpleDateFormat("yyyy-MM-dd").parse(row(datePos));
         val speech = Speech(row(speakerPos), row(topicPos), date, row(wordsCountPos).toInt)
         speech
       })
+      return speeches
+    }
+
+    private def mostSpeakerForYear(speeches: Seq[Speech], year: Int): String = {
+      // filter by topic
+      val speakerForYear = speeches.filter(speech => {
+        val cal = new GregorianCalendar();
+        cal.setTime(speech.date);
+        val yearOfSpeech = cal.get(Calendar.YEAR);
+        year == yearOfSpeech
+      }).map(s => s.speaker)
+
+      // creates: Map(speaker1 -> 3, speaker2 -> 5, ...)
+      val speechesPerSpeaker = speakerForYear.groupBy(identity).mapValues(_.size).toList
+
+      // calculate result by max count
+      val mostSpeakerForYearOption = speechesPerSpeaker.reduceOption((a, b) => if (a._2 > b._2) a else b)
+      val mostSpeakerForYear = mostSpeakerForYearOption match {
+        case None => "null"
+        case Some(value) => {
+          val counts = speechesPerSpeaker.map(a => a._2)
+          if (counts.indexOf(value._2) == counts.lastIndexOf(value._2)) value._1 else "null"
+        }
+      }
+      mostSpeakerForYear
+    }
+
+    private def mostSpeakerForTopic(speeches: Seq[Speech], topic: String): String = {
+      // filter by topic
+      val speakerByTopic = speeches.filter(s => s.topic == topic).map(s => s.speaker);
+
+      // creates: Map(speaker1 -> 3, speaker2 -> 5, ...)
+      val speechesPerSpeaker = speakerByTopic.groupBy(identity).mapValues(_.size).toList
+
+      // calculate result by max count
+      val mostSpeakerForTopicOption = speechesPerSpeaker.reduceOption((a, b) => if (a._2 > b._2) a else b)
+      val mostSpeakerForTopic = mostSpeakerForTopicOption match {
+        case None => "null"
+        case Some(value) => {
+          val counts = speechesPerSpeaker.map(a => a._2)
+          if (counts.indexOf(value._2) == counts.lastIndexOf(value._2)) value._1 else "null"
+        }
+      }
+      mostSpeakerForTopic
+    }
+
+    private def leastWordySpeaker(speeches: Seq[Speech]): String = {
+      // creates: Map(speaker1 -> [speech1, speech2], speaker2 -> [speech3, speech4], ...)
+      val speechesPerSpeaker = speeches.map(s => (s.speaker, s.wordsCount)).groupBy(a => a._1)
+      val speechesWithTotalCountPerSpeaker = speechesPerSpeaker.map(a => (a._1, a._2.reduce((x, y)  => (x._1, x._2 + y._2)))).map(_._2)
+      val leastSpeakerOption = speechesWithTotalCountPerSpeaker.reduceOption((a, b) => if (a._2 < b._2) a else b);
+      val leastSpeaker = leastSpeakerOption match {
+        case None => "null"
+        case Some(value) => {
+          val counts = speechesWithTotalCountPerSpeaker.map(a => a._2).toSeq
+          if (counts.indexOf(value._2) == counts.lastIndexOf(value._2)) value._1 else "null"
+        }
+      }
+      return leastSpeaker
     }
 }
