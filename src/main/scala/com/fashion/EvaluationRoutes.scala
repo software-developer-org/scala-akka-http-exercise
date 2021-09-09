@@ -20,8 +20,15 @@ class EvaluationRoutes(evaluationRegistry: ActorRef[EvaluationRegistry.Command])
   private implicit val timeout = Timeout.create(system.settings.config.getDuration("my-app.routes.ask-timeout"))
 
   def evaluate(params: Seq[(String, String)]): Future[Speeches] = {
-    params.map((param) => println(s">>>>key: '${param._1}', val<'${param._2}'>"))
-    evaluationRegistry.ask(Evaluate)
+    val urls = params
+    // accept only "url" query parameter containing a value
+     .filter(param => 
+      // check key
+      param._1 == "url" &&
+      // check value
+      param._2.trim().length() > 0)
+     .map(param => param._2.trim())
+    evaluationRegistry.ask(Evaluate(urls, _))
   }
 
   val evaluationRoutes: Route =
