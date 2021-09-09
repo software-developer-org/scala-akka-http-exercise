@@ -19,10 +19,10 @@ class EvaluationRoutes(evaluationRegistry: ActorRef[EvaluationRegistry.Command])
   // If ask takes more time than this to complete the request is failed
   private implicit val timeout = Timeout.create(system.settings.config.getDuration("my-app.routes.ask-timeout"))
 
-  def evaluate(params: Seq[(String, String)]): Future[Speeches] = {
+  def evaluate(params: Seq[(String, String)]): Future[SpeechesEvaluation] = {
     val urls = params
-    // accept only "url" query parameter containing a value
-     .filter(param => 
+    // accept only "url" query parameters containing a value
+     .filter(param =>
       // check key
       param._1 == "url" &&
       // check value

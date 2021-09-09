@@ -39,7 +39,7 @@ class EvaluationRoutesSpec extends AnyWordSpec with Matchers with ScalaFutures w
         contentType should ===(ContentTypes.`application/json`)
 
         // and no entries should be in the list:
-        entityAs[String] should ===("""{"speeches":[]}""")
+        entityAs[String] should ===("""{"leastWordy":"","mostSecurity":"","mostSpeeches":""}""")
       }
     }
   }

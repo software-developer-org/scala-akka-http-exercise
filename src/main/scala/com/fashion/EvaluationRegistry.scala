@@ -13,9 +13,13 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.util.Failure
 import scala.util.Success
+import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.GregorianCalendar
+import java.util.Date
 
-final case class Speech(speaker: String, topic: String, wordsCount: Int)
-final case class Speeches(speeches: immutable.Seq[Speech])
+final case class Speech(speaker: String, topic: String, date: Date, wordsCount: Int)
+final case class SpeechesEvaluation(mostSpeeches: String, mostSecurity: String, leastWordy: String)
 
 object EvaluationRegistry {
 
@@ -24,9 +28,11 @@ object EvaluationRegistry {
   val date = "Datum"
   val wordsCount = "Wörter"
 
+  val dateFormatter = new SimpleDateFormat("yyyy-MM-dd")
+
   // actor protocol
   sealed trait Command
-  final case class Evaluate(urls: Seq[String], replyTo: ActorRef[Speeches]) extends Command
+  final case class Evaluate(urls: Seq[String], replyTo: ActorRef[SpeechesEvaluation]) extends Command
   final case class ActionPerformed(description: String)
 
   def apply(): Behavior[Command] = registry()
@@ -38,7 +44,7 @@ object EvaluationRegistry {
         Behaviors.same
     }
 
-    private def getData(urls: Seq[String], replyTo: ActorRef[Speeches]) {
+    private def getData(urls: Seq[String], replyTo: ActorRef[SpeechesEvaluation]) {
       implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
       implicit val executionContext = system.executionContext
       val speechesFutures = urls.map(httpClientRequest)
@@ -47,7 +53,7 @@ object EvaluationRegistry {
           println("======================================================================")
           speeches.foreach((speech) => println("<" + speech + ">"))
           println("======================================================================")
-          replyTo ! Speeches(Set.empty.toSeq)
+          replyTo ! SpeechesEvaluation("", "", "")
         })
     }
 
@@ -95,7 +101,9 @@ object EvaluationRegistry {
 
       val data = csvArray.tail
       return data.map(row => {
-        val speech = Speech(row(speakerPos), row(topicPos), row(wordsCountPos).toInt)
+        // SimpleDateFormat is not thread safe! Hence create a new instance
+        val date = new SimpleDateFormat("yyyy-MM-dd").parse(row(datePos));
+        val speech = Speech(row(speakerPos), row(topicPos), date, row(wordsCountPos).toInt)
         speech
       })
     }
