@@ -193,6 +193,46 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
     // ====================================================================
 
     // ================= tests for mostSpeakerForTopic()
+     """return null speaker for most speeches on a given topic with empty speeches as input""" in {
+      val input = Array()
+
+      // test
+      val result = mostSpeakerForTopic(input, "any topic")
+
+      // assert
+      result should ===("null")
+    }
+
+     """return speaker_1 for most speeches on a topic 1""" in {
+      val input = Array(
+        // in year 2019
+        // - topic 1
+        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
+        Speech("speaker_2", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
+        Speech("speaker_3", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
+        Speech("speaker_4", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
+        // - topic 2
+        Speech("speaker_1", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
+        Speech("speaker_2", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
+        Speech("speaker_3", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
+        Speech("speaker_4", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
+        // - topic 3
+        Speech("speaker_1", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-9-21"), 123), // speaker 1 and 2 has most speeches
+        Speech("speaker_2", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-8-21"), 123),
+        // other years
+        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
+      )
+
+      // test
+      val result = mostSpeakerForTopic(input, "topic_1")
+
+      // assert
+      result should ===("speaker_1")
+    }
     // ====================================================================
 
     // ================= tests for leastWordySpeaker()
