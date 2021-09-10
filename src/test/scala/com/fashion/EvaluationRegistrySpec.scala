@@ -11,7 +11,7 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
 
   "EvaluationRegistry" should {
 
-    // tests for asCsvArray()
+    // ================= tests for asCsvArray()
     "create empty csv for empty input" in {
       // empty input
       val input ="";
@@ -49,8 +49,9 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
       val expectedResult = Array(Array("a", "b", "c"), Array("1", "2", "3"))
       result should ===(expectedResult)
     }
+    // ====================================================================
 
-    // tests for toSpeeches()
+    // ================= tests for toSpeeches()
     "create empty speeches with input Array(Array())" in {
       val input: Array[Array[String]] = Array(Array());
 
@@ -92,6 +93,16 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
       //assert
       result should ===(Array(Speech("a speaker", "a topic", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123)))
     }
+    // ====================================================================
+
+    // ================= tests for mostSpeakerForYear()
+    // ====================================================================
+
+    // ================= tests for mostSpeakerForTopic()
+    // ====================================================================
+
+    // ================= tests for leastWordySpeaker()
+    // ====================================================================
   }
 
 }
