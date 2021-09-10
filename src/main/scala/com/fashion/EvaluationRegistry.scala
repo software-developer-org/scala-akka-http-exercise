@@ -45,7 +45,7 @@ object EvaluationRegistry {
         Behaviors.same
     }
 
-    private def getData(urls: Seq[String], replyTo: ActorRef[SpeechesEvaluation]) {
+    def getData(urls: Seq[String], replyTo: ActorRef[SpeechesEvaluation]) {
       implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
       implicit val executionContext = system.executionContext
       val speechesFutures = urls.map(httpClientRequest)
@@ -60,7 +60,7 @@ object EvaluationRegistry {
       })
     }
 
-    private def httpClientRequest(url: String): Future[Array[Speech]] = {
+    def httpClientRequest(url: String): Future[Array[Speech]] = {
       // HTTP client request
       implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
       val request = HttpRequest(uri = url)
@@ -82,7 +82,7 @@ object EvaluationRegistry {
       return data
     }
 
-    private def asCsvArray(responseData: String): Array[Array[String]] = {
+    def asCsvArray(responseData: String): Array[Array[String]] = {
       responseData
         // split per row
         .split('\n')
@@ -95,7 +95,7 @@ object EvaluationRegistry {
         })
     }
 
-    private def toSpeeches(csvArray: Array[Array[String]]): Array[Speech] = {
+    def toSpeeches(csvArray: Array[Array[String]]): Array[Speech] = {
       val header = csvArray.head
       val speakerPos = header.indexOf(speaker)
       val topicPos = header.indexOf((topic))
@@ -112,7 +112,7 @@ object EvaluationRegistry {
       return speeches
     }
 
-    private def mostSpeakerForYear(speeches: Seq[Speech], year: Int): String = {
+    def mostSpeakerForYear(speeches: Seq[Speech], year: Int): String = {
       // filter by topic
       val speakerForYear = speeches.filter(speech => {
         val cal = new GregorianCalendar();
@@ -136,7 +136,7 @@ object EvaluationRegistry {
       mostSpeakerForYear
     }
 
-    private def mostSpeakerForTopic(speeches: Seq[Speech], topic: String): String = {
+    def mostSpeakerForTopic(speeches: Seq[Speech], topic: String): String = {
       // filter by topic
       val speakerByTopic = speeches.filter(s => s.topic == topic).map(s => s.speaker);
 
@@ -155,7 +155,7 @@ object EvaluationRegistry {
       mostSpeakerForTopic
     }
 
-    private def leastWordySpeaker(speeches: Seq[Speech]): String = {
+    def leastWordySpeaker(speeches: Seq[Speech]): String = {
       // creates: Map(speaker1 -> [speech1, speech2], speaker2 -> [speech3, speech4], ...)
       val speechesPerSpeaker = speeches.map(s => (s.speaker, s.wordsCount)).groupBy(a => a._1)
       val speechesWithTotalCountPerSpeaker = speechesPerSpeaker.map(a => (a._1, a._2.reduce((x, y)  => (x._1, x._2 + y._2)))).map(_._2)
