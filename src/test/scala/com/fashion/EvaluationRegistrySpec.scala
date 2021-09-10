@@ -96,6 +96,16 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
     // ====================================================================
 
     // ================= tests for mostSpeakerForYear()
+    """evaluate null with empty speeches""" in {
+      val input = Array()
+
+      // test
+      val result = mostSpeakerForYear(input, 2019)
+
+      // assert
+      result should ===("null")
+    }
+
     """evaluate speaker_1 with most speeches in year 2019""" in {
       val input = Array(
         // in year 2019
