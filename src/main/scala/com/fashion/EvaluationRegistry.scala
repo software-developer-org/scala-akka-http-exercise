@@ -24,10 +24,10 @@ final case class SpeechesEvaluation(mostSpeeches: String, mostSecurity: String, 
 
 object EvaluationRegistry {
 
-  val speaker = "Redner"
-  val topic = "Thema"
-  val date = "Datum"
-  val wordsCount = "Wörter"
+  val HEADER_SPEAKER = "Redner"
+  val HEADER_TOPIC = "Thema"
+  val HEADER_DATE = "Datum"
+  val HEADER_WORDS_COUNT = "Wörter"
 
   val dateFormatter = new SimpleDateFormat("yyyy-MM-dd")
 
@@ -97,10 +97,11 @@ object EvaluationRegistry {
 
     def toSpeeches(csvArray: Array[Array[String]]): Array[Speech] = {
       val header = csvArray.head
-      val speakerPos = header.indexOf(speaker)
-      val topicPos = header.indexOf((topic))
-      val datePos = header.indexOf((date))
-      val wordsCountPos = header.indexOf((wordsCount))
+      // expecting ALL 4 header keys exists!
+      val speakerPos = header.indexOf(HEADER_SPEAKER)
+      val topicPos = header.indexOf(HEADER_TOPIC)
+      val datePos = header.indexOf(HEADER_DATE)
+      val wordsCountPos = header.indexOf(HEADER_WORDS_COUNT)
 
       val data = csvArray.tail
       val speeches = data.map(row => {
