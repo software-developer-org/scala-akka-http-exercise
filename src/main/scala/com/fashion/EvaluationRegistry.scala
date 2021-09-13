@@ -48,9 +48,19 @@ object EvaluationRegistry {
     def getData(urls: Seq[String], replyTo: ActorRef[SpeechesEvaluation]) {
       implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
       implicit val executionContext = system.executionContext
-      val speechesFutures = urls.map(httpClientRequest)
-      val speeches = Future.sequence((speechesFutures)).map(_.flatten);
-      speeches.foreach(speeches => {
+      // list containing a future for each request
+      val listOfFutures = urls.map(httpClientRequest)
+      // move all into one future containing a list with string data for each response
+      val responseFuture = Future.sequence((listOfFutures));
+      // map to speeches and evaluatio
+      responseFuture.foreach(responseDataList => {
+        // map to speeches
+        val speeches = responseDataList
+        .map(asCsvArray)
+        .map(toSpeeches)
+        .flatten
+
+        // evaluate
         val mostSpeeches = mostSpeakerForYear(speeches.toList, 2012)
         val mostSecurity = mostSpeakerForTopic(speeches, "Innere Sicherheit")
         val leastWordy= leastWordySpeaker(speeches)
@@ -59,7 +69,7 @@ object EvaluationRegistry {
       })
     }
 
-    def httpClientRequest(url: String): Future[Array[Speech]] = {
+    def httpClientRequest(url: String): Future[String] = {
       // HTTP client request
       implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
       val request = HttpRequest(uri = url)
@@ -75,14 +85,14 @@ object EvaluationRegistry {
       // subscribe and handle response
       import scala.language.postfixOps
       val data = responseFuture
-        .flatMap(_.entity.toStrict(2 minutes)).map(_.data.utf8String)
-        .map(asCsvArray)
-        .map(toSpeeches)
+        .flatMap(_.entity.toStrict(1 minutes)).map(response => {
+          response.data.utf8String
+        })
       return data
     }
 
     def asCsvArray(responseData: String): Array[Array[String]] = {
-      responseData
+      val csvArray = responseData
         // split per row
         .split('\n')
         .map(row => {
@@ -92,6 +102,7 @@ object EvaluationRegistry {
           // remove trailing whitespaces
           .map(column => column.trim())
         })
+      return csvArray
     }
 
     def toSpeeches(csvArray: Array[Array[String]]): Array[Speech] = {
