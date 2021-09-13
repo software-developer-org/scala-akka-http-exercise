@@ -17,7 +17,7 @@ class EvaluationRoutes(evaluationRegistry: ActorRef[EvaluationRegistry.Command])
   import JsonFormats._
 
   // If ask takes more time than this to complete the request is failed
-  private implicit val timeout = Timeout.create(system.settings.config.getDuration("my-app.routes.ask-timeout"))
+  private implicit val timeout = Timeout.create(system.settings.config.getDuration("fashion-app.routes.ask-timeout"))
 
   def evaluate(params: Seq[(String, String)]): Future[SpeechesEvaluation] = {
     val urls = params
