@@ -1,3 +1,12 @@
+# About
+
+This exercise uses:
+- [Akka HTTP](https://doc.akka.io/docs/akka-http/current/introduction.html#using-akka-http)
+
+NB: there are unit tests for each business logic:
+- EvaluationRoutesSpec for endpoint testing
+- EvaluationRegistrySpec for business logic
+
 # Getting Started
 
 ## Server
