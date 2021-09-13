@@ -43,7 +43,6 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
 
       // test
       val result = asCsvArray(input)
-      println(">>>>result:" + result)
 
       // assert
       val expectedResult = Array(Array("a", "b", "c"), Array("1", "2", "3"))

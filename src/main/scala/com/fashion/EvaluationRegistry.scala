@@ -55,7 +55,6 @@ object EvaluationRegistry {
         val mostSecurity = mostSpeakerForTopic(speeches, "Innere Sicherheit")
         val leastWordy= leastWordySpeaker(speeches)
         val speechesEvaluation = SpeechesEvaluation(mostSecurity, mostSecurity, leastWordy);
-        println(">>>>speechesEvaluation " + speechesEvaluation)
         replyTo ! speechesEvaluation
       })
     }
