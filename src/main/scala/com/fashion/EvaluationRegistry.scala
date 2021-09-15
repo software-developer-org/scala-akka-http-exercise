@@ -55,10 +55,7 @@ object EvaluationRegistry {
       // map to speeches and evaluatio
       responseFuture.foreach(responseDataList => {
         // map to speeches
-        val speeches = responseDataList
-        .map(asCsvArray)
-        .map(toSpeeches)
-        .flatten
+        val speeches = getSpeeches(responseDataList)
 
         // evaluate
         val mostSpeeches = mostSpeakerForYear(speeches.toList, 2012)
@@ -67,6 +64,13 @@ object EvaluationRegistry {
         val speechesEvaluation = SpeechesEvaluation(mostSpeeches, mostSecurity, leastWordy);
         replyTo ! speechesEvaluation
       })
+    }
+
+    def getSpeeches(responseDataList: Seq[String]): Seq[Speech] = {
+      responseDataList
+        .map(asCsvArray)
+        .map(toSpeeches)
+        .flatten
     }
 
     def httpClientRequest(url: String): Future[String] = {

@@ -245,7 +245,45 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
     // ====================================================================
 
     // ================= tests for leastWordySpeaker()
+    """get speeches with one speech""" in {
+      // data with one speech
+      val input: Array[String] = Array(
+        HEADER_SPEAKER + ", " + HEADER_TOPIC + ", " + HEADER_DATE + ", " + HEADER_WORDS_COUNT+ "\n" +
+        "speaker1" + ", " + "topic1" + ", " + "2019-12-21"+ ", " + "1" + "\n" +
+        "speaker1" + ", " + "topic2" + ", " + "2019-11-21"+ ", " + "2" + "\n" +
+        "speaker2" + ", " + "topic1" + ", " + "2019-10-21"+ ", " + "3" + "\n" +
+        "speaker2" + ", " + "topic1" + ", " + "2019-9-21"+ ", " + "4" + "\n" +
+        "speaker2" + ", " + "topic1" + ", " + "2019-8-21"+ ", " + "5" + "\n" +
+        "speaker3" + ", " + "topic2" + ", " + "2019-7-21"+ ", " + "6"
+      )
+
+      // test
+      val result = getSpeeches(input)
+
+      //assert
+      result should ===(Array(
+        Speech("speaker1", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 1),
+        Speech("speaker1", "topic2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-11-21"), 2),
+        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 3),
+        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-9-21"), 4),
+        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-8-21"), 5),
+        Speech("speaker3", "topic2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-7-21"), 6)
+      ))
+    }
     // ====================================================================
-  }
+
+
+    // ================= tests for 
+    // ====================================================================
+
+    // ================= tests for 
+    // ====================================================================
+
+    // ================= tests for 
+    // ====================================================================
+
+    // ================= tests for 
+    // ====================================================================
+    }
 
 }
