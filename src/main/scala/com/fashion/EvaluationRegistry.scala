@@ -41,23 +41,19 @@ object EvaluationRegistry {
   private def registry(): Behavior[Command] =
     Behaviors.receiveMessage {
       case Evaluate(urls, replyTo) =>
-        getData(urls, replyTo)
+        implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
+        implicit val executionContext = system.executionContext
+        // list containing a future for each request
+        val listOfFutures = urls.map(httpClientRequest)
+        // move all into one future containing a list with string data for each response
+        val responseFuture = Future.sequence((listOfFutures));
+        // map to speeches and evaluate
+        responseFuture.foreach(responseDataList => {
+          val speeches = getSpeeches(responseDataList)
+          val speechesEvaluation = evaluate(speeches, 2012, "Innere Sicherheit");
+          replyTo ! speechesEvaluation
+        })
         Behaviors.same
-    }
-
-    def getData(urls: Seq[String], replyTo: ActorRef[SpeechesEvaluation]) {
-      implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
-      implicit val executionContext = system.executionContext
-      // list containing a future for each request
-      val listOfFutures = urls.map(httpClientRequest)
-      // move all into one future containing a list with string data for each response
-      val responseFuture = Future.sequence((listOfFutures));
-      // map to speeches and evaluatio
-      responseFuture.foreach(responseDataList => {
-        val speeches = getSpeeches(responseDataList)
-        val speechesEvaluation = evaluate(speeches, 2012, "Innere Sicherheit");
-        replyTo ! speechesEvaluation
-      })
     }
 
     def getSpeeches(responseDataList: Seq[String]): Seq[Speech] = {
