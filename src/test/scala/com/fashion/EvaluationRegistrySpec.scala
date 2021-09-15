@@ -4,8 +4,7 @@ import com.fashion.EvaluationRegistry._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.LocalDate
 
 class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
 
@@ -79,7 +78,7 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
       val result = toSpeeches(input)
 
       //assert
-      result should ===(Array(Speech("a speaker", "a topic", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123)))
+      result should ===(Array(Speech("a speaker", "a topic", LocalDate.parse("2019-12-21"), 123)))
     }
 
     """create speeches with different column order in input""" in {
@@ -90,7 +89,7 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
       val result = toSpeeches(input)
 
       //assert
-      result should ===(Array(Speech("a speaker", "a topic", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123)))
+      result should ===(Array(Speech("a speaker", "a topic", LocalDate.parse("2019-12-21"), 123)))
     }
     // ====================================================================
 
@@ -109,26 +108,26 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
       val input = Array(
         // in year 2019
         // - topic 1
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_2", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_3", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_4", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_2", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_3", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_4", "topic_1", LocalDate.parse("2019-12-21"), 123),
         // - topic 2
-        Speech("speaker_1", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_2", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_3", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_4", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
+        Speech("speaker_1", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_2", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_3", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_4", "topic_2", LocalDate.parse("2019-10-21"), 123),
         // - topic 3
-        Speech("speaker_1", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-9-21"), 123),
-        Speech("speaker_2", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-8-21"), 123),
+        Speech("speaker_1", "topic_3", LocalDate.parse("2019-09-21"), 123),
+        Speech("speaker_2", "topic_3", LocalDate.parse("2019-08-21"), 123),
         // - topic 4
-        Speech("speaker_1", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-1-21"), 123),
+        Speech("speaker_1", "topic_3", LocalDate.parse("2019-01-21"), 123),
         // other years
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
       )
 
       // test
@@ -142,24 +141,24 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
       val input = Array(
         // in year 2019
         // - topic 1
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_2", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_3", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_4", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_2", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_3", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_4", "topic_1", LocalDate.parse("2019-12-21"), 123),
         // - topic 2
-        Speech("speaker_1", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_2", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_3", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_4", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
+        Speech("speaker_1", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_2", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_3", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_4", "topic_2", LocalDate.parse("2019-10-21"), 123),
         // - topic 3
-        Speech("speaker_1", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-9-21"), 123), // speaker 1 and 2 has most speeches
-        Speech("speaker_2", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-8-21"), 123),
+        Speech("speaker_1", "topic_3", LocalDate.parse("2019-09-21"), 123), // speaker 1 and 2 has most speeches
+        Speech("speaker_2", "topic_3", LocalDate.parse("2019-08-21"), 123),
         // other years
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
       )
 
       // test
@@ -173,24 +172,24 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
       val input = Array(
         // in year 2019
         // - topic 1
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_2", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_3", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_4", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_2", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_3", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_4", "topic_1", LocalDate.parse("2019-12-21"), 123),
         // - topic 2
-        Speech("speaker_1", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_2", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_3", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_4", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
+        Speech("speaker_1", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_2", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_3", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_4", "topic_2", LocalDate.parse("2019-10-21"), 123),
         // - topic 3
-        Speech("speaker_1", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-9-21"), 123), // speaker 1 and 2 has most speeches
-        Speech("speaker_2", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-8-21"), 123),
+        Speech("speaker_1", "topic_3", LocalDate.parse("2019-09-21"), 123), // speaker 1 and 2 has most speeches
+        Speech("speaker_2", "topic_3", LocalDate.parse("2019-08-21"), 123),
         // other years
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
       )
 
       // test
@@ -216,24 +215,24 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
       val input = Array(
         // in year 2019
         // - topic 1
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_2", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_3", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
-        Speech("speaker_4", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_2", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_3", "topic_1", LocalDate.parse("2019-12-21"), 123),
+        Speech("speaker_4", "topic_1", LocalDate.parse("2019-12-21"), 123),
         // - topic 2
-        Speech("speaker_1", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_2", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_3", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
-        Speech("speaker_4", "topic_2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 123),
+        Speech("speaker_1", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_2", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_3", "topic_2", LocalDate.parse("2019-10-21"), 123),
+        Speech("speaker_4", "topic_2", LocalDate.parse("2019-10-21"), 123),
         // - topic 3
-        Speech("speaker_1", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-9-21"), 123), // speaker 1 and 2 has most speeches
-        Speech("speaker_2", "topic_3", new SimpleDateFormat("yyyy-MM-dd").parse("2019-8-21"), 123),
+        Speech("speaker_1", "topic_3", LocalDate.parse("2019-09-21"), 123), // speaker 1 and 2 has most speeches
+        Speech("speaker_2", "topic_3", LocalDate.parse("2019-08-21"), 123),
         // other years
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2017-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
-        Speech("speaker_1", "topic_1", new SimpleDateFormat("yyyy-MM-dd").parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2017-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
+        Speech("speaker_1", "topic_1", LocalDate.parse("2018-12-31"), 123),
       )
 
       // test
@@ -252,9 +251,9 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
         "speaker1" + ", " + "topic1" + ", " + "2019-12-21"+ ", " + "1" + "\n" +
         "speaker1" + ", " + "topic2" + ", " + "2019-11-21"+ ", " + "2" + "\n" +
         "speaker2" + ", " + "topic1" + ", " + "2019-10-21"+ ", " + "3" + "\n" +
-        "speaker2" + ", " + "topic1" + ", " + "2019-9-21"+ ", " + "4" + "\n" +
-        "speaker2" + ", " + "topic1" + ", " + "2019-8-21"+ ", " + "5" + "\n" +
-        "speaker3" + ", " + "topic2" + ", " + "2019-7-21"+ ", " + "6"
+        "speaker2" + ", " + "topic1" + ", " + "2019-09-21"+ ", " + "4" + "\n" +
+        "speaker2" + ", " + "topic1" + ", " + "2019-08-21"+ ", " + "5" + "\n" +
+        "speaker3" + ", " + "topic2" + ", " + "2019-07-21"+ ", " + "6"
       )
 
       // test
@@ -262,12 +261,12 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
 
       //assert
       result should ===(Array(
-        Speech("speaker1", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 1),
-        Speech("speaker1", "topic2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-11-21"), 2),
-        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 3),
-        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-9-21"), 4),
-        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-8-21"), 5),
-        Speech("speaker3", "topic2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-7-21"), 6)
+        Speech("speaker1", "topic1", LocalDate.parse("2019-12-21"), 1),
+        Speech("speaker1", "topic2", LocalDate.parse("2019-11-21"), 2),
+        Speech("speaker2", "topic1", LocalDate.parse("2019-10-21"), 3),
+        Speech("speaker2", "topic1", LocalDate.parse("2019-09-21"), 4),
+        Speech("speaker2", "topic1", LocalDate.parse("2019-08-21"), 5),
+        Speech("speaker3", "topic2", LocalDate.parse("2019-07-21"), 6)
       ))
     }
     // ====================================================================
@@ -276,12 +275,12 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
     // ================= tests for evaluate()
     """evaluate 6 speeches""" in {
       val input = Array(
-        Speech("speaker1", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 1),
-        Speech("speaker1", "topic2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-11-21"), 2),
-        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 3),
-        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-9-21"), 4),
-        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-8-21"), 5),
-        Speech("speaker3", "topic2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-7-21"), 6)
+        Speech("speaker1", "topic1", LocalDate.parse("2019-12-21"), 1),
+        Speech("speaker1", "topic2", LocalDate.parse("2019-11-21"), 2),
+        Speech("speaker2", "topic1", LocalDate.parse("2019-10-21"), 3),
+        Speech("speaker2", "topic1", LocalDate.parse("2019-09-21"), 4),
+        Speech("speaker2", "topic1", LocalDate.parse("2019-08-21"), 5),
+        Speech("speaker3", "topic2", LocalDate.parse("2019-07-21"), 6)
       )
 
       // test

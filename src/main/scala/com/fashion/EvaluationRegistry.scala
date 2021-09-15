@@ -8,18 +8,14 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.util.Timeout
 
+import java.time.LocalDate
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.util.Failure
 import scala.util.Success
-import java.time.format.DateTimeFormatter
-import java.text.SimpleDateFormat
-import java.util.GregorianCalendar
-import java.util.Date
-import java.util.Calendar
 
-final case class Speech(speaker: String, topic: String, date: Date, wordsCount: Int)
+final case class Speech(speaker: String, topic: String, date: LocalDate, wordsCount: Int)
 final case class SpeechesEvaluation(mostSpeeches: String, mostSecurity: String, leastWordy: String)
 
 object EvaluationRegistry {
@@ -28,8 +24,6 @@ object EvaluationRegistry {
   val HEADER_TOPIC = "Thema"
   val HEADER_DATE = "Datum"
   val HEADER_WORDS_COUNT = "Wörter"
-
-  val dateFormatter = new SimpleDateFormat("yyyy-MM-dd")
 
   // actor protocol
   sealed trait Command
@@ -117,7 +111,7 @@ object EvaluationRegistry {
       val data = csvArray.tail
       val speeches = data.map(row => {
         // SimpleDateFormat is not thread safe! Hence create a new instance
-        val date = new SimpleDateFormat("yyyy-MM-dd").parse(row(datePos));
+        val date = LocalDate.parse(row(datePos));
         val speech = Speech(row(speakerPos), row(topicPos), date, row(wordsCountPos).toInt)
         speech
       })
@@ -127,9 +121,7 @@ object EvaluationRegistry {
     def mostSpeakerForYear(speeches: Seq[Speech], year: Int): String = {
       // filter by topic
       val speakerForYear = speeches.filter(speech => {
-        val cal = new GregorianCalendar();
-        cal.setTime(speech.date);
-        val yearOfSpeech = cal.get(Calendar.YEAR);
+        val yearOfSpeech = speech.date.getYear();
         year == yearOfSpeech
       }).map(s => s.speaker)
 
