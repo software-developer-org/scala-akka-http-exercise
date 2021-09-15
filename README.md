@@ -3,7 +3,7 @@
 This exercise uses:
 - [Akka HTTP](https://doc.akka.io/docs/akka-http/current/introduction.html#using-akka-http)
 
-NB: there are unit tests for each business logic:
+Important: there are unit tests for each business logic:
 - EvaluationRoutesSpec for endpoint testing
 - EvaluationRegistrySpec for business logic
 
@@ -25,7 +25,7 @@ Api syntax: http://localhost:8080/evaluation?url=url1&url=url2...
 
 Example:
 ```
-curl "http://localhost:8080/evaluation?url=https://raw.githubusercontent.com/software-developer-org/speeches-example-data/main/speech1.csv&url=https://raw.githubusercontent.com/software-developer-org/speeches-example-data/main/speech1.csv
+curl "http://localhost:8080/evaluation?url=https://raw.githubusercontent.com/software-developer-org/speeches-example-data/main/speech1.csv&url=https://raw.githubusercontent.com/software-developer-org/speeches-example-data/main/speech1.csv"
 ```
 
 # Exercise Assumptions
