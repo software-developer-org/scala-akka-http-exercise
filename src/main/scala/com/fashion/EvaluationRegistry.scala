@@ -54,14 +54,8 @@ object EvaluationRegistry {
       val responseFuture = Future.sequence((listOfFutures));
       // map to speeches and evaluatio
       responseFuture.foreach(responseDataList => {
-        // map to speeches
         val speeches = getSpeeches(responseDataList)
-
-        // evaluate
-        val mostSpeeches = mostSpeakerForYear(speeches.toList, 2012)
-        val mostSecurity = mostSpeakerForTopic(speeches, "Innere Sicherheit")
-        val leastWordy= leastWordySpeaker(speeches)
-        val speechesEvaluation = SpeechesEvaluation(mostSpeeches, mostSecurity, leastWordy);
+        val speechesEvaluation = evaluate(speeches, 2012, "Innere Sicherheit");
         replyTo ! speechesEvaluation
       })
     }
@@ -71,6 +65,13 @@ object EvaluationRegistry {
         .map(asCsvArray)
         .map(toSpeeches)
         .flatten
+    }
+
+    def evaluate(speeches: Seq[Speech], year: Int, topic: String): SpeechesEvaluation = {
+        val mostSpeeches = mostSpeakerForYear(speeches.toList, year)
+        val mostSecurity = mostSpeakerForTopic(speeches, topic)
+        val leastWordy= leastWordySpeaker(speeches)
+        SpeechesEvaluation(mostSpeeches, mostSecurity, leastWordy);
     }
 
     def httpClientRequest(url: String): Future[String] = {

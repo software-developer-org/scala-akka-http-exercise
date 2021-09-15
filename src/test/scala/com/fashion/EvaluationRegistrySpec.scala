@@ -245,7 +245,7 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
     // ====================================================================
 
     // ================= tests for leastWordySpeaker()
-    """get speeches with one speech""" in {
+    """get speeches with 6 speeches""" in {
       // data with one speech
       val input: Array[String] = Array(
         HEADER_SPEAKER + ", " + HEADER_TOPIC + ", " + HEADER_DATE + ", " + HEADER_WORDS_COUNT+ "\n" +
@@ -273,7 +273,22 @@ class EvaluationRegistrySpec extends AnyWordSpec with Matchers {
     // ====================================================================
 
 
-    // ================= tests for 
+    // ================= tests for evaluate()
+    """evaluate 6 speeches""" in {
+      val input = Array(
+        Speech("speaker1", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-12-21"), 1),
+        Speech("speaker1", "topic2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-11-21"), 2),
+        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-21"), 3),
+        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-9-21"), 4),
+        Speech("speaker2", "topic1", new SimpleDateFormat("yyyy-MM-dd").parse("2019-8-21"), 5),
+        Speech("speaker3", "topic2", new SimpleDateFormat("yyyy-MM-dd").parse("2019-7-21"), 6)
+      )
+
+      // test
+      val result = evaluate(input, 2019, "topic1")
+
+      result should ===(SpeechesEvaluation("speaker2", "speaker2", "speaker1"))
+    }
     // ====================================================================
 
     // ================= tests for 
